@@ -60,4 +60,27 @@ public class Tests_Ecommerce extends BaseTest {
         }
         Assert.assertEquals(driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/productName")).getText(), productName);
     }
+    
+    @Test(dependsOnMethods = {"fill_form"})
+    public void cart_page() throws InterruptedException {
+        driver.findElements(AppiumBy.id("com.androidsample.generalstore:id/productAddCart")).get(0).click();
+        //index will remain same because text is dynamic
+        driver.findElements(AppiumBy.id("com.androidsample.generalstore:id/productAddCart")).get(1).click();
+        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/appbar_btn_cart")).click();
+        try {
+            wait.until(ExpectedConditions.attributeContains(
+                    driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/toolbar_title")), "text", "Cart"));
+        } catch (StaleElementReferenceException e) {
+            System.out.println("Element is stale. Handle appropriately.");
+        }
+        List<WebElement> products = driver.findElements(AppiumBy.id("com.androidsample.generalstore:id/productPrice"));
+        int numberOfItems = products.size();
+        double purchaseAmount = 0.00;
+        double totalPurchaseAmount = Double.parseDouble(driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/totalAmountLbl"))
+                .getText().substring(1));
+        for(int i = 0; i<numberOfItems;i++) {
+            purchaseAmount += Double.parseDouble(products.get(i).getText().substring(1));
+        }
+        Assert.assertEquals(totalPurchaseAmount, purchaseAmount);
+    }
 }

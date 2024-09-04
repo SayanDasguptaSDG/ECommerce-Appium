@@ -82,5 +82,10 @@ public class Tests_Ecommerce extends BaseTest {
             purchaseAmount += Double.parseDouble(products.get(i).getText().substring(1));
         }
         Assert.assertEquals(totalPurchaseAmount, purchaseAmount);
+        longPressAction(driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/termsButton")));
+        driver.findElement(AppiumBy.xpath("//android.widget.Button[@text=\"CLOSE\"]")).click();
+        driver.findElement(AppiumBy.className("android.widget.CheckBox")).click();
+        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/btnProceed")).click();
+        Thread.sleep(2000);
     }
 }

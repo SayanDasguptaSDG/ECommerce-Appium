@@ -5,6 +5,7 @@ import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -40,6 +41,7 @@ public class BaseTest {
         capabilities.setCapability("appium:automationName", "UiAutomator2");
         capabilities.setCapability("appium:appPackage", "com.androidsample.generalstore");
         capabilities.setCapability("appium:appActivity", "com.androidsample.generalstore.MainActivity");
+        capabilities.setCapability("appium:chromedriverExecutable", "src\\main\\resources\\chromedriver.exe");
 
         driver = new AndroidDriver(
                 new URI("http://127.0.0.1:4723").toURL(), capabilities);

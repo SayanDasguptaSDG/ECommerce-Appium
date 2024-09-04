@@ -2,9 +2,12 @@ package com.ecommerce.appium.testcases;
 
 import com.ecommerce.appium.helper.BaseTest;
 import io.appium.java_client.AppiumBy;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -12,6 +15,7 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 
 public class Tests_Ecommerce extends BaseTest {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
@@ -87,5 +91,25 @@ public class Tests_Ecommerce extends BaseTest {
         driver.findElement(AppiumBy.className("android.widget.CheckBox")).click();
         driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/btnProceed")).click();
         Thread.sleep(2000);
+    }
+
+    @Test(dependsOnMethods = {"fill_form", "cart_page"})
+    public void validate_webview() throws InterruptedException {
+        Thread.sleep(10000); //depends on system performance
+        Set<String> contexts = driver.getContextHandles();
+        for(String context: contexts) {
+            System.out.println(context);
+        }
+        driver.context("WEBVIEW_com.androidsample.generalstore");
+        driver.findElement(By.name("q")).sendKeys("hello");
+        driver.findElement(By.name("q")).sendKeys(Keys.ENTER);
+        driver.pressKey(new KeyEvent(AndroidKey.BACK));
+        driver.context("NATIVE_APP");
+        try {
+            wait.until(ExpectedConditions.attributeContains(
+                    driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/toolbar_title")), "text", "General Store"));
+        } catch (StaleElementReferenceException e) {
+            System.out.println("Element is stale. Handle appropriately.");
+        }
     }
 }

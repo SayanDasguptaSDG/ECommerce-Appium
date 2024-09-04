@@ -51,4 +51,8 @@ public class MobileBrowserBaseTest {
         driver.quit();
         service.stop();
     }
+
+    public void scrollDown() {
+        ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 1000)", "");
+    }
 }

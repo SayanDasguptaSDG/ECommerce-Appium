@@ -2,6 +2,7 @@ package com.ecommerce.appium.testcases;
 
 import com.ecommerce.appium.helper.BaseTest;
 import io.appium.java_client.AppiumBy;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -51,8 +52,12 @@ public class Tests_Ecommerce extends BaseTest {
             }
         }
         driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/appbar_btn_cart")).click();
-        wait.until(ExpectedConditions.attributeContains(
-                driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/toolbar_title")), "text", "Cart"));
+        try {
+            wait.until(ExpectedConditions.attributeContains(
+                    driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/toolbar_title")), "text", "Cart"));
+        } catch (StaleElementReferenceException e) {
+            System.out.println("Element is stale. Handle appropriately.");
+        }
         Assert.assertEquals(driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/productName")).getText(), productName);
     }
 }

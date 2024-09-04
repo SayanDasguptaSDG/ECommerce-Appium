@@ -3,12 +3,18 @@ package com.ecommerce.appium.testcases;
 import com.ecommerce.appium.helper.BaseTest;
 import io.appium.java_client.AppiumBy;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.List;
 
 public class Tests_Ecommerce extends BaseTest {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
     @Test
     public void fill_form() throws InterruptedException {
         driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/nameField")).sendKeys("Sayan Dasgupta");
@@ -45,7 +51,8 @@ public class Tests_Ecommerce extends BaseTest {
             }
         }
         driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/appbar_btn_cart")).click();
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.attributeContains(
+                driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/toolbar_title")), "text", "Cart"));
         Assert.assertEquals(driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/productName")).getText(), productName);
     }
 }

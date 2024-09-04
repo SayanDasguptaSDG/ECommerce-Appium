@@ -2,8 +2,11 @@ package com.ecommerce.appium.testcases;
 
 import com.ecommerce.appium.helper.BaseTest;
 import io.appium.java_client.AppiumBy;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 public class Tests_Ecommerce extends BaseTest {
     @Test
@@ -15,7 +18,6 @@ public class Tests_Ecommerce extends BaseTest {
         scrollTillFound("Argentina");
         driver.findElement(AppiumBy.xpath("//android.widget.TextView[@text=\"Argentina\"]")).click();
         driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/btnLetsShop")).click();
-        Thread.sleep(3000);
     }
 
     @Test
@@ -27,5 +29,23 @@ public class Tests_Ecommerce extends BaseTest {
         driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/btnLetsShop")).click();
         String toastMessage = driver.findElement(AppiumBy.xpath("(//android.widget.Toast)[1]")).getAttribute("name");
         Assert.assertEquals(toastMessage, "Please enter your name");
+    }
+
+    @Test(dependsOnMethods = {"fill_form"})
+    public void add_to_cart() throws InterruptedException {
+        List<WebElement> products;
+        String productName = "Jordan 6 Rings";
+        scrollTillFound(productName);
+        products = (driver.findElements(AppiumBy.id("com.androidsample.generalstore:id/productName")));
+        for(int i=0;i<products.size();i++) {
+            productName = products.get(i).getText();
+            if(products.get(i).getText().equals(productName)) {
+                driver.findElements(AppiumBy.id("com.androidsample.generalstore:id/productAddCart")).get(i).click();
+                break;
+            }
+        }
+        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/appbar_btn_cart")).click();
+        Thread.sleep(2000);
+        Assert.assertEquals(driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/productName")).getText(), productName);
     }
 }

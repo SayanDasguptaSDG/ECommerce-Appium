@@ -5,7 +5,6 @@ import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
-import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -19,7 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
 
-public class BaseTest {
+public class MobileBrowserBaseTest {
     public AndroidDriver driver;
     public AppiumDriverLocalService service;
     public DesiredCapabilities capabilities;
@@ -39,8 +38,6 @@ public class BaseTest {
         capabilities.setCapability("appium:deviceName", "TestPhone");
         capabilities.setCapability("appium:udid", "emulator-5554");
         capabilities.setCapability("appium:automationName", "UiAutomator2");
-        capabilities.setCapability("appium:appPackage", "com.androidsample.generalstore");
-        capabilities.setCapability("appium:appActivity", "com.androidsample.generalstore.MainActivity");
         capabilities.setCapability("appium:chromedriverExecutable", "src\\main\\resources\\chromedriver.exe");
         capabilities.setCapability("browserName", "Chrome");
 
@@ -53,17 +50,5 @@ public class BaseTest {
     public void teardown() {
         driver.quit();
         service.stop();
-    }
-
-    public void scrollTillFound(String element) {
-        driver.findElement(AppiumBy.androidUIAutomator
-                ("new UiScrollable(new UiSelector())." +
-                        "scrollIntoView(text(\"" + element + "\"));"));
-    }
-
-    public void longPressAction(WebElement element) {
-        ((JavascriptExecutor) driver).executeScript("mobile:longClickGesture",
-                ImmutableMap.of("elementId", ((RemoteWebElement) element).getId(),
-                        "duration", 2000));
     }
 }
